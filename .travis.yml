@@ -8,7 +8,6 @@ rvm:
   - 2.5.1
 
 script: echo "Running tests against $(ruby -v) ..."
-
 jobs:
   include:
     - stage: gem release
