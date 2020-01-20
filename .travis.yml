@@ -5,6 +5,7 @@
 # or to be configured as encrypted env vars here.
 
 sudo: false
+dist: trusty
 
 env:
   global:
@@ -28,4 +29,20 @@ jobs:
         - cat ~/shared/*
 
 after_success:
-  - aws s3 sync ~/shared s3://travis-build-stages-shared-storage-test/shared
+rvm:
+  - 2.2
+  - 2.3
+  - 2.4.4
+  - 2.5.1
+
+script: echo "Running tests against $(ruby -v) ..."
+jobs:
+  include:
+    - stage: gem release
+      rvm: 2.2
+      script: echo "Deploying to rubygems.org ..."
+      deploy:
+        provider: rubygems
+        gem: travis-build-stages-demo
+        api_key: $RUBYGEMS_API_KEY
+        on: deploy-gem-release
